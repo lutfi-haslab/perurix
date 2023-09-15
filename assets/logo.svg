@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="logosandtypes_com" data-name="logosandtypes com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 150 150">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #43cbff;
+      }
+
+      .cls-2 {
+        fill: none;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="50.31" y1="44.63" x2="136.88" y2="67.83" gradientTransform="translate(0 152) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#45b8fb"/>
+      <stop offset=".53" stop-color="#4b85f0"/>
+      <stop offset=".9" stop-color="#5151e5"/>
+    </linearGradient>
+  </defs>
+  <path class="cls-2" d="M0,0H150V150H0V0Z"/>
+  <path class="cls-3" d="M131.93,104.58l-54.65-54.65-28.76,27.85,55.1,55.1c7.85,7.85,20.57,7.85,28.3,0,7.85-7.73,7.85-20.46,0-28.3Z"/>
+  <path class="cls-1" d="M48.8,18.84c-8.09-7.61-20.81-7.14-28.3,.95-7.25,7.73-7.25,19.62,0,27.35l16.65,16.65,11.54-11.3c9.4-9.16,9.51-24.14,.36-33.54q-.12,0-.24-.12Z"/>
+  <path class="cls-1" d="M131.93,18.72c-7.85-7.85-20.46-7.85-28.3,0L17.76,104.58c-7.85,7.85-7.85,20.57,0,28.3,7.85,7.73,20.57,7.85,28.3,0L131.93,47.02c7.85-7.73,7.85-20.46,0-28.3Z"/>
+</svg>
