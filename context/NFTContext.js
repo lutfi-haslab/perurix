@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import axios from "axios";
-import { MarketAddress, MarketAddressABI } from "./constants";
+import {
+  MarketAddress,
+  tokenAddress,
+  MarketAddressABI,
+  PixTokenABI,
+} from "./constants";
 // import { NFTStorage, Blob } from "nft.storage";
 import { create } from "ipfs-http-client";
 // const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN;
@@ -13,12 +18,16 @@ const client = create({
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(MarketAddress, MarketAddressABI, signerOrProvider);
+const fetchPiXContract = (signerOrProvider) =>
+  new ethers.Contract(tokenAddress, PixTokenABI, signerOrProvider);
 
 export const NFTContext = React.createContext();
 
 export const NFTProvider = ({ children }) => {
   const nftCurrency = "pChain";
   const [currentAccount, setCurrentAccount] = useState("");
+  const [currAllowance, setAllowance] = useState(0);
+  const [currBalance, setBalance] = useState(0);
 
   const connectWallet = async () => {
     if (!window.ethereum) return alert("Please install MetaMask.");
@@ -38,6 +47,7 @@ export const NFTProvider = ({ children }) => {
 
     if (accounts.length) {
       setCurrentAccount(accounts[0]);
+      getAllowance(accounts[0]);
     } else {
       console.log("No accounts found");
     }
@@ -52,7 +62,7 @@ export const NFTProvider = ({ children }) => {
         image: added.path,
       });
 
-      return metadata
+      return metadata;
     } catch (error) {
       console.log("Error uploading to file");
     }
@@ -60,6 +70,7 @@ export const NFTProvider = ({ children }) => {
 
   const createNFT = async (formInput, fileUrl, router) => {
     const { name, description, price } = formInput;
+    console.log(price);
     if (!name || !description || !fileUrl || !price) return;
     const data = JSON.stringify({
       name,
@@ -68,7 +79,7 @@ export const NFTProvider = ({ children }) => {
     });
 
     try {
-      const blob = new Blob([data], {type : 'text/javascript'});
+      const blob = new Blob([data], { type: "text/javascript" });
       const formData = new FormData();
       formData.append("file", blob);
       const res = await axios.post(
@@ -84,7 +95,7 @@ export const NFTProvider = ({ children }) => {
 
       router.push("/");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.log("Error uploading to create nft");
     }
   };
@@ -95,17 +106,10 @@ export const NFTProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
 
-    const price = ethers.utils.parseUnits(formInputPrice, "ether");
     const contract = fetchContract(signer);
-    const listingPrice = await contract.getListingPrice();
-
     const transaction = !isReselling
-      ? await contract.createToken(url, price, {
-          value: listingPrice.toString(),
-        })
-      : await contract.resellToken(id, price, {
-          value: listingPrice.toString(),
-        });
+      ? await contract.createToken(url, Number(formInputPrice))
+      : await contract.resellToken(id, Number(formInputPrice));
     await transaction.wait();
   };
 
@@ -116,7 +120,7 @@ export const NFTProvider = ({ children }) => {
     //   process.env.NEXT_PUBLIC_ALCHEMY_KEY
     // );
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://chain.pchain.id/besu"
+      "https://chain.pchain.id/edge"
     );
 
     const contract = fetchContract(provider);
@@ -189,24 +193,64 @@ export const NFTProvider = ({ children }) => {
     return items;
   };
 
-  const buyNFT = async (nft) => {
+  const addAllowance = async (allowance) => {
     const web3modal = new Web3Modal();
     const connection = await web3modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
-
-    const contract = fetchContract(signer);
-
-    const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-
-    const transaction = await contract.createMarketSale(nft.tokenId, {
-      value: price,
-    });
-
-    await transaction.wait();
+    const contractPiX = fetchPiXContract(signer);
+    const approval = await contractPiX.increaseAllowance(
+      MarketAddress,
+      allowance
+    );
+    const receipt = await approval.wait();
+    return receipt;
+    // if (approval) {
+    //   console.log(`Success increase allowance to ${allowance}`)
+    //   return approval
+    // };
   };
+
+  const getAllowance = async (account) => {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contractPiX = fetchPiXContract(signer);
+    console.log(account, MarketAddress);
+    const allowance = await contractPiX.allowance(account, MarketAddress);
+    const balance = await contractPiX.balanceOf(account);
+    if (allowance) {
+      console.log(allowance);
+      setAllowance(allowance.toString());
+      setBalance(balance.toString());
+    }
+  };
+
+  const buyNFT = async (nft) => {
+    try {
+      const web3modal = new Web3Modal();
+      const connection = await web3modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+
+      const contract = fetchContract(signer);
+      const tx = await contract.createMarketSale(Number(nft.tokenId));
+      const receipt = await tx.wait();
+      return {
+        success: true
+      };
+    } catch (error) {
+      // console.log("Error", error);
+      return {
+        success: false,
+      }
+    }
+  };
+
   useEffect(() => {
     checkIfWalletIsConnect();
+    // getAllowance();
   }, []);
   return (
     <NFTContext.Provider
@@ -214,8 +258,12 @@ export const NFTProvider = ({ children }) => {
         nftCurrency,
         connectWallet,
         currentAccount,
+        currAllowance,
+        currBalance,
         uploadToIPFS,
         createNFT,
+        addAllowance,
+        getAllowance,
         fetchNFTs,
         fetchMyNFTsOrListedNFTs,
         buyNFT,

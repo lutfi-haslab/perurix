@@ -1,20 +1,19 @@
+import axios from "axios";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import React, {
-  useState,
-  useEffect,
-  useMemo,
   useCallback,
   useContext,
+  useMemo,
+  useState
 } from "react";
-import { useRouter } from "next/router";
 import { useDropzone } from "react-dropzone";
-import Image from "next/image";
-import { useTheme } from "next-themes";
-import axios from "axios";
 
-import { Button, Input, Loader } from "../components";
-import images from "../assets";
-import { NFTContext } from "../context/NFTContext";
 import { create } from "ipfs-http-client";
+import images from "../assets";
+import { Button, Input } from "../components";
+import { NFTContext } from "../context/NFTContext";
 // const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN;
 // const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 const client = create({

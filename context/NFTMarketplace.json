@@ -62,6 +62,25 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_fromTokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_toTokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "BatchMetadataUpdate",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "uint256",
           "name": "tokenId",
@@ -93,6 +112,19 @@
         }
       ],
       "name": "MarketItemCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "MetadataUpdate",
       "type": "event"
     },
     {
@@ -167,7 +199,7 @@
       ],
       "name": "createMarketSale",
       "outputs": [],
-      "stateMutability": "payable",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -226,7 +258,7 @@
               "type": "bool"
             }
           ],
-          "internalType": "struct NFTMarketplace.MarketItem[]",
+          "internalType": "struct PeruriX.MarketItem[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -266,7 +298,7 @@
               "type": "bool"
             }
           ],
-          "internalType": "struct NFTMarketplace.MarketItem[]",
+          "internalType": "struct PeruriX.MarketItem[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -306,7 +338,7 @@
               "type": "bool"
             }
           ],
-          "internalType": "struct NFTMarketplace.MarketItem[]",
+          "internalType": "struct PeruriX.MarketItem[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -328,19 +360,6 @@
           "internalType": "address",
           "name": "",
           "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getListingPrice",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -462,7 +481,7 @@
         },
         {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         }
       ],
@@ -561,19 +580,6 @@
       "name": "transferFrom",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_listingPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "updateListingPrice",
-      "outputs": [],
-      "stateMutability": "payable",
       "type": "function"
     }
   ],
