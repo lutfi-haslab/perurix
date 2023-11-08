@@ -24,7 +24,7 @@ const fetchPiXContract = (signerOrProvider) =>
 export const NFTContext = React.createContext();
 
 export const NFTProvider = ({ children }) => {
-  const nftCurrency = "pChain";
+  const nftCurrency = "IDRC";
   const [currentAccount, setCurrentAccount] = useState("");
   const [currAllowance, setAllowance] = useState(0);
   const [currBalance, setBalance] = useState(0);
@@ -107,6 +107,7 @@ export const NFTProvider = ({ children }) => {
     const signer = provider.getSigner();
 
     const contract = fetchContract(signer);
+    const price = ethers.utils.formatUnits(formInputPrice.toString(), 'ether');
     const transaction = !isReselling
       ? await contract.createToken(url, Number(formInputPrice))
       : await contract.resellToken(id, Number(formInputPrice));
@@ -238,13 +239,13 @@ export const NFTProvider = ({ children }) => {
       const tx = await contract.createMarketSale(Number(nft.tokenId));
       const receipt = await tx.wait();
       return {
-        success: true
+        success: true,
       };
     } catch (error) {
       // console.log("Error", error);
       return {
         success: false,
-      }
+      };
     }
   };
 

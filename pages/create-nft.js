@@ -111,7 +111,7 @@ const CreateNFT = () => {
             {fileUrl && (
               <aside>
                 <div>
-                  <img src={fileUrl} alt="asset_file" />
+                  <Image src={fileUrl} alt="asset_file" />
                 </div>
               </aside>
             )}

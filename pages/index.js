@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import Image from "next/dist/client/image";
 import { useTheme } from "next-themes";
 import { Banner, CreatorCard, Loader, NFTCard, SearchBar } from "../components";
-import images from "../assets";
+import images from "../assets/index";
 import { NFTContext } from "../context/NFTContext";
 import { getCreators } from "../utils/getTopCreators";
 import { shortenAddress } from "../utils/shortenAddress";

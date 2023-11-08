@@ -102,7 +102,7 @@ const MyNFTs = () => {
             {shortenAddress(currentAccount)}
           </p>
           <p className="font-poppins dark:text-white text-nft-black-1 font-semibold text-xl">
-            {currBalance} PiX
+            {currBalance} IDRC
           </p>
           <p className="font-poppins dark:text-white text-nft-black-1 font-medium mb-2">
             you have {currAllowance} allowance

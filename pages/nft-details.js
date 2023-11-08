@@ -5,7 +5,7 @@ import Image from "next/image";
 import { NFTContext } from "../context/NFTContext";
 import { shortenAddress } from "../utils/shortenAddress";
 import { Button, Loader, Modal } from "../components";
-import images from "../assets";
+import images from "../assets/index";
 
 const PaymentBodyCmp = ({ nft, nftCurrency }) => (
   <div className="flex flex-col">
