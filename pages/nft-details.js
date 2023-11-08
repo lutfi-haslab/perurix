@@ -55,7 +55,8 @@ const PaymentBodyCmp = ({ nft, nftCurrency }) => (
 );
 
 const NFTDetails = () => {
-  const { nftCurrency, currentAccount, buyNFT } = useContext(NFTContext);
+  const { nftCurrency, currentAccount, buyNFT, NftEvent } =
+    useContext(NFTContext);
   const [errMsg, setErrMsg] = useState(null);
   const [nft, setNft] = useState({
     image: "",
@@ -72,8 +73,7 @@ const NFTDetails = () => {
 
   const checkout = async () => {
     const tx = await buyNFT(nft);
-    
-
+    // await NftEvent(nft);
     if (!tx.success) {
       setErrMsg("There is something Error, check your Allowance or Network");
       setPaymentModal(true);
@@ -147,7 +147,7 @@ const NFTDetails = () => {
             <p className="font-poppins dark:text-white text-nft-black-1 font-normal text-base border border-gray p-2">
               You cannot buy your own NFT
             </p>
-          ) : currentAccount === nft.owner.toLowerCase() ? (
+          ) : currentAccount === nft.owner ? (
             <Button
               btnName="List on Marketplace"
               btnType="primary"

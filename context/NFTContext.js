@@ -10,6 +10,8 @@ import {
 } from "./constants";
 // import { NFTStorage, Blob } from "nft.storage";
 import { create } from "ipfs-http-client";
+import Web3 from "web3";
+const web3 = new Web3();
 // const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN;
 // const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 const client = create({
@@ -35,7 +37,6 @@ export const NFTProvider = ({ children }) => {
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-
     setCurrentAccount(accounts[0]);
     window.location.reload();
   };
@@ -93,6 +94,14 @@ export const NFTProvider = ({ children }) => {
       );
       await createSale(res.data.data.data.url, price);
 
+      await axios.post(`${process.env.NEXT_PUBLIC_CBDC_API}/idrc/event`, {
+        amount: Number(price),
+        from: currentAccount,
+        to: MarketAddress,
+        eventType: "LISTING NFT",
+        tokenType: "IDRC",
+      });
+
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -107,7 +116,7 @@ export const NFTProvider = ({ children }) => {
     const signer = provider.getSigner();
 
     const contract = fetchContract(signer);
-    const price = ethers.utils.formatUnits(formInputPrice.toString(), 'ether');
+    const price = ethers.utils.formatUnits(formInputPrice.toString(), "ether");
     const transaction = !isReselling
       ? await contract.createToken(url, Number(formInputPrice))
       : await contract.resellToken(id, Number(formInputPrice));
@@ -237,7 +246,26 @@ export const NFTProvider = ({ children }) => {
 
       const contract = fetchContract(signer);
       const tx = await contract.createMarketSale(Number(nft.tokenId));
-      const receipt = await tx.wait();
+      await tx.wait();
+
+      if (tx) {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_CBDC_API}/idrc/event`,
+          {
+            amount: nft.price * 10 ** 18,
+            from: currentAccount,
+            to: nft.owner,
+            eventType: "BUY NFT",
+            tokenType: "IDRC",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+
       return {
         success: true,
       };
@@ -247,6 +275,25 @@ export const NFTProvider = ({ children }) => {
         success: false,
       };
     }
+  };
+
+  const NftEvent = async (nft) => {
+    const res = await axios.post(
+      "http://localhost:4571/idrc/event",
+      {
+        amount: nft.price * 10 ** 18,
+        from: currentAccount,
+        to: nft.owner,
+        eventType: "BUY NFT",
+        tokenType: "IDRC",
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(res.data);
   };
 
   useEffect(() => {
@@ -269,6 +316,7 @@ export const NFTProvider = ({ children }) => {
         fetchMyNFTsOrListedNFTs,
         buyNFT,
         createSale,
+        NftEvent,
       }}
     >
       {children}
