@@ -1,7 +1,7 @@
 import marketAbi from "./NFTMarketplace.json";
 import tokenAbi from "./PiXToken.json";
 
-export const MarketAddress = "0xEFB5F7cB6f2B4f4e7F9d0e7a6E258Ce05904396B";
+export const MarketAddress = "0x9902A607D48e53BE38089633bd7a56405c1b9577";
 const address1 = "0x424d4cA1A22a5D39412A4334Ed785B909FAbB9bd";
 const address2 = "0x4B43789f58A8E8A6f299f3A660c7663fE6A23Fd8";
 const vault = "0x2c7D8dd4c8A29Ad8b29294760cf9CfcEFeCC4831";

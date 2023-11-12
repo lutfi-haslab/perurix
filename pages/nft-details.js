@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { MarketAddress } from "../context/constants";
 
 import { NFTContext } from "../context/NFTContext";
 import { shortenAddress } from "../utils/shortenAddress";
@@ -87,6 +88,7 @@ const NFTDetails = () => {
   useEffect(() => {
     if (!router.isReady) return;
     setNft(router.query);
+    console.log(nft);
     setIsLoading(false);
   }, [router.isReady]);
 
@@ -143,31 +145,50 @@ const NFTDetails = () => {
           </div>
         </div>
         <div className="flex flex-row sm:flex-col mt-10">
-          {currentAccount === nft.seller.toLowerCase() ? (
-            <p className="font-poppins dark:text-white text-nft-black-1 font-normal text-base border border-gray p-2">
-              You cannot buy your own NFT
-            </p>
-          ) : currentAccount === nft.owner ? (
-            <Button
-              btnName="List on Marketplace"
-              btnType="primary"
-              classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl"
-              handleClick={() =>
-                router.push(
-                  `/resell-nft?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`
-                )
-              }
-            />
-          ) : (
-            <Button
-              btnName={`Buy for ${nft.price * 10 ** 18} ${nftCurrency}`}
-              btnType="primary"
-              classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl"
-              handleClick={() => {
-                setPaymentModal(true);
-              }}
-            />
+          {currentAccount === nft.owner.toLowerCase() && (
+            <div className="flex flex-col space-y-4 w-full">
+              <p className="font-poppins dark:text-white text-nft-black-1 font-normal text-base border border-gray p-2">
+                You cannot buy your own NFT
+              </p>
+              <Button
+                btnName="List on Marketplace"
+                btnType="primary"
+                classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl w-full"
+                handleClick={() =>
+                  router.push(
+                    `/resell-nft?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`
+                  )
+                }
+              />
+            </div>
           )}
+          {MarketAddress === nft.owner &&
+            currentAccount === nft.seller.toLowerCase() && (
+              <div className="flex flex-col space-y-4 w-full">
+                <p className="font-poppins dark:text-white text-nft-black-1 font-normal text-base border border-gray p-2">
+                  Buy back your NFT?
+                </p>
+                <Button
+                  btnName={`Buy for ${nft.price * 10 ** 18} ${nftCurrency}`}
+                  btnType="primary"
+                  classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl w-full"
+                  handleClick={() => {
+                    setPaymentModal(true);
+                  }}
+                />
+              </div>
+            )}
+          {MarketAddress === nft.owner &&
+            currentAccount !== nft.seller.toLowerCase() && (
+              <Button
+                btnName={`Buy for ${nft.price * 10 ** 18} ${nftCurrency}`}
+                btnType="primary"
+                classStyles="mr-5 sm:mr-0 sm:mb-5 rounded-xl w-full"
+                handleClick={() => {
+                  setPaymentModal(true);
+                }}
+              />
+            )}
         </div>
       </div>
 

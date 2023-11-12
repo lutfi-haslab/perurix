@@ -31,15 +31,76 @@ export const NFTProvider = ({ children }) => {
   const [currAllowance, setAllowance] = useState(0);
   const [currBalance, setBalance] = useState(0);
 
+  const addIdrcToken = async () => {
+    const tokenSymbol = 'IDRC';
+    const tokenDecimals = 0.1;
+    const tokenImage = 'https://cbdc.prifa.id/assets/app-logo-color%201-297d020b.svg';
+    
+    try {
+      const wasAdded = await ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', 
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            image: tokenImage, // A string url of the token logo
+          },
+        },
+      });
+    
+      if (wasAdded) {
+        console.log('Thanks for your interest!');
+      } else {
+        console.log('Your loss!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const connectWallet = async () => {
     if (!window.ethereum) return alert("Please install MetaMask.");
-
+  
+    const chainId = "0x64"; // Chain ID of the network you want to check
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId }],
+      });
+    } catch (error) {
+      if (error.code === 4902) {
+        // Network doesn't exist, add it
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId,
+              chainName: "Polygon Edge",
+              rpcUrls: ["https://chain.pchain.id/edge"],
+              blockExplorerUrls: ["https://platform.pchain.id/console/edge/explorer"],
+              nativeCurrency: {
+                name: "pChain",
+                symbol: "pChain",
+                decimals: 18,
+              },
+            },
+          ],
+        });
+      } else {
+        // Other error occurred
+        console.error(error);
+      }
+    }
+  
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     setCurrentAccount(accounts[0]);
     window.location.reload();
   };
+  
 
   const checkIfWalletIsConnect = async () => {
     if (!window.ethereum) return alert("Please install MetaMask.");
@@ -84,7 +145,7 @@ export const NFTProvider = ({ children }) => {
       const formData = new FormData();
       formData.append("file", blob);
       const res = await axios.post(
-        "https://api.pchain.id/ipfs/upload/file/project_becodr839inyudef1el9hedp",
+        "https://api.pchain.id/ipfs/upload/file/project_yyehpe8wv0l4t1lfysgz8m03",
         formData,
         {
           headers: {
@@ -305,6 +366,7 @@ export const NFTProvider = ({ children }) => {
       value={{
         nftCurrency,
         connectWallet,
+        addIdrcToken,
         currentAccount,
         currAllowance,
         currBalance,

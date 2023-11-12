@@ -149,35 +149,43 @@ const MyNFTs = () => {
               // onClick={() => setSuccessModal(false)}
             >
               <Button
-                btnName="add 1"
+                btnName="add 1000"
                 btnType="outline"
-                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${allowance === 1 && "bg-blue-700"}`}
-                handleClick={() => setAllowance(1)}
+                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${
+                  allowance === 1000 && "bg-blue-700"
+                }`}
+                handleClick={() => setAllowance(1000)}
               />
-                <Button
-                btnName="add 5"
+              <Button
+                btnName="add 100000"
                 btnType="outline"
-                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${allowance === 5 && "bg-blue-700"}`}
-                handleClick={() => setAllowance(5)}
+                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${
+                  allowance === 100000 && "bg-blue-700"
+                }`}
+                handleClick={() => setAllowance(100000)}
               />
-                <Button
-                btnName="add 10"
+              <Button
+                btnName="add 1000000"
                 btnType="outline"
-                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${allowance === 10 && "bg-blue-700"}`}
-                handleClick={() => setAllowance(10)}
+                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${
+                  allowance === 1000000 && "bg-blue-700"
+                }`}
+                handleClick={() => setAllowance(1000000)}
               />
-                <Button
-                btnName="add 100"
+              <Button
+                btnName="add 100000000"
                 btnType="outline"
-                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 active:bg-blue-700 ${allowance === 100 && "bg-blue-700"}`}
-                handleClick={() => setAllowance(100)}
+                classStyles={`mx-2 rounded-md w-full hover:bg-blue-700 ${
+                  allowance === 100000000 ? "bg-blue-700" : ""
+                }`}
+                handleClick={() => setAllowance(100000000)}
               />
             </div>
           }
           footer={
             <div className="flexCentre flex-col ">
               <Button
-                btnName="Submit"
+                btnName={`Add ${allowance} allowance`}
                 classStyles="sm:mb-5 sm:mr-0 rounded-xl"
                 handleClick={async () => {
                   const res = await addAllowance(allowance);

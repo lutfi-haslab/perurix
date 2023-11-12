@@ -37,7 +37,7 @@ const CreateNFT = () => {
     formData.append("file", file[0]);
 
     const res = await axios.post(
-      "https://api.pchain.id/ipfs/upload/file/project_becodr839inyudef1el9hedp",
+      "https://api.pchain.id/ipfs/upload/file/project_yyehpe8wv0l4t1lfysgz8m03",
       formData,
       {
         headers: {
