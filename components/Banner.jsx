@@ -9,7 +9,7 @@ const Banner = ({ name, childStyles, parentStyle }) => (
         {name}
       </p>
       <p>
-        PeruriX adalah NFT marketplace yang bekerja sama dengan lembaga
+        PRIfA NFT adalah NFT marketplace yang bekerja sama dengan lembaga
         pemerintah, salah satunya adalah PT. POS untuk memberikan pengalaman
         unik seperti Cryptostamp, dan Jenis NFT Lainnya.
       </p>

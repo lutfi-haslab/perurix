@@ -23,7 +23,7 @@ const Marketplace = ({ Component, pageProps }) => {
       <ThemeProvider attribute="class">
         <Head>
           <link rel="shortcut icon" href="/logo02.png" />
-          <title>PeruriX Marketplace</title>
+          <title>PRIfA NFT Marketplace</title>
           <meta name="description" content="Khanisic Marketplace" />
         </Head>
         <div className="dark:bg-nft-dark bg-white min-h-screen">
